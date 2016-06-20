@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+        <p class="pull-right">Account Balace: </p>
+        <br>
+        <table class="table table-condensed">
+            <tr>
+                <th>Date</td>
+                <th>Payee</td>
+                <th></td>
+                <th>Ammount</td>
+            </tr>
+            {% for transaction in object_list %}
+            <tr>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.payee }}</td>
+                <td>{{ transaction.transaction_type }}</td>
+                <td>{{ transaction.ammount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+{% endblock %}

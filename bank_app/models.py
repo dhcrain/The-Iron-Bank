@@ -5,9 +5,12 @@ from django.contrib.auth.models import User
 
 
 class Transaction(models.Model):
-    type_choices = (('+', 'Credit'), ('-', 'Debit'))
+    type_choices = (('+', 'Deposit'), ('-', 'Debit'))
     user = models.ForeignKey(User)
     transaction_type = models.CharField(max_length=6, choices=type_choices)
     date = models.DateTimeField(auto_now_add=True)
-    ammount = models.FloatField()
+    ammount = models.DecimalField(max_digits=8, decimal_places=2)
     payee = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.payee
