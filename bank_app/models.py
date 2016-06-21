@@ -12,5 +12,8 @@ class Transaction(models.Model):
     ammount = models.DecimalField(max_digits=8, decimal_places=2)
     payee = models.CharField(max_length=50)
 
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         return self.payee

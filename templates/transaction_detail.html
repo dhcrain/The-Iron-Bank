@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <br>
+    <hr>
+    <ul class="list-unstyled t-detail">
+        <li>Date/Time: {{ transaction.date }}</li>
+        <li>Payee: {{ transaction.payee }}</li>
+        <li>Ammount: {{ transaction.transaction_type }} ${{ transaction.ammount }}</li>
+    </ul>
+    <hr>
+{% endblock %}

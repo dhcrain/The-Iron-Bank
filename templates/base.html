@@ -5,30 +5,38 @@
         <meta charset="utf-8">
         <title>{% block title %}Iron Bank{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'bank_app/css/bootstrap.css' %}" media="screen" title="bootsrap css" charset="utf-8">
-        <link rel="stylesheet" href="{% static 'bank_app/css/main.css' %}" media="screen" title="main css" charset="utf-8">
+        <link rel="stylesheet" href="{% static 'bank_app/css/main.css' %}">
     </head>
     <body>
         {# menu bar #}
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs navbar-fixed-top">
             <li role="presentation"><a href="{% url 'index_view' %}">Home</a></li>
             {% if request.user.is_authenticated %}
-                {# <li role="presentation"><a href="{% url 'shorten_link' %}">Bookmark a Link</a></li>#}
-                <li role="presentation"><a href="{% url 'logout' %}">Log Out</a></li>
+                <li role="presentation"><a href="{% url 'account_view' %}">Account</a></li>
+                <li role="presentation"><a href="{% url 'logout' %}?next={% url 'index_view' %}">Log Out</a></li>
                 <li role="presentation" class="disabled pull-right"><a href="#">Welcome {{ request.user }}</a></li>
             {% else %}
-                {# <li role="presentation"><a href="{% url 'sign_up_view' %}">Sign Up</a></li>#}
+                <li role="presentation"><a href="{% url 'register_view' %}">Get an account</a></li>
                 <li role="presentation"><a href="{% url 'login' %}">Log In</a></li>
             {% endif %}
         </ul>
-        <div class="">
             {% block hero %}
-                hero
+            <div class="hero-block row">
+                <div class="col-md-6 hero-text">
+                    <h2>Thank you for trusting <br>The Iron Piggy Bank</h2>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <br>
             {% endblock %}
-        </div>
         <div class="container">
             {% block body %}
                 body content
             {% endblock %}
         </div>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{% static 'bank_app/js/bootstrap.js' %}"></script>
     </body>
 </html>
