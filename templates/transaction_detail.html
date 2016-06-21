@@ -4,10 +4,19 @@
     <br>
     <hr>
     <h1>{{ not_auth }}</h1>
-    <ul class="list-unstyled t-detail">
-        <li>Date/Time: {{ transaction.date }}</li>
-        <li>Payee: {{ transaction.payee }}</li>
-        <li>Ammount: {{ transaction.transaction_type }} ${{ transaction.ammount }}</li>
-    </ul>
+    <table class="table t-detail">
+        <tr>
+            <td><strong>Date/Time: </strong></td>
+            <td>{{ object.date }}</td>
+        </tr>
+        <tr>
+            <td><strong>Payee:</strong></td>
+            <td>{{ object.payee }}</td>
+        </tr>
+        <tr>
+            <td><strong>Ammount: </strong></td>
+            <td>{{ object.transaction_type }} ${{ object.ammount }}</td>
+        </tr>
+    </table>
     <hr>
 {% endblock %}

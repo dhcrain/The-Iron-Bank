@@ -7,6 +7,7 @@ from bank_app.models import Transaction
 from django.http import request
 from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -28,11 +29,6 @@ class IndexView(TemplateView):
 class AccountView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = 'bank_app/transaction_list.html'
-
-    transaction = Transaction.objects.all()
-    for trans in transaction:
-        print(trans.transaction_type)
-
     def get_context_data(self, **kwargs):
         get_balance(self)
         context = super().get_context_data(**kwargs)
@@ -49,7 +45,6 @@ class TransactionDetailView(LoginRequiredMixin, DetailView):
         return Transaction.objects.filter(user=self.request.user)
 
 
-# can't navigate to, will impliment in part 2, cant get the <0 finction to work, and its late.
 class AddTransactionView(CreateView):
     model = Transaction
     fields = ['transaction_type', 'ammount', 'payee']
@@ -57,13 +52,31 @@ class AddTransactionView(CreateView):
 
     def form_valid(self, form):
         context = super().get_context_data()
-        get_balance(self)
         transaction = form.save(commit=False)
         transaction.user = self.request.user
         if transaction.transaction_type == '-':
-            if (self.acct_balance - transaction.ammount) <= 0:
-                success_url = '/account'
-                context['not_allowed'] = "Insufficient Funds"
-                return context
+            balance = get_balance(self)
+            if (balance - transaction.ammount) <= 0:
+                return HttpResponse("Insufficient Funds, you only have $" + str(balance) + " avalible.")
+        return super().form_valid(form)
 
-        return super(AddTransactionView, self).form_valid(form)
+class TransferView(CreateView):
+    model = Transaction
+    # template_name = 'bank_app/transfer.html'
+    fields = ['ammount', 'payee']
+    success_url = '/account'
+
+    def form_valid(self, form):
+        context = super().get_context_data()
+        transaction = form.save(commit=False)
+        transaction.user = self.request.user
+        transaction.transaction_type='+'
+        # if transaction.payee not in User.id:
+            # pass # no such account
+        balance = get_balance(self)
+
+        Transaction.objects.create(user=User.objects.get(id=transaction.payee), transaction_type='+', ammount=transaction.ammount, payee=transaction.user)
+        if (balance - transaction.ammount) <= 0:
+            return HttpResponse("Insufficient Funds, you only have $" + str(balance) + " avalible.")
+            # https://docs.djangoproject.com/en/1.9/topics/forms/#rendering-form-error-messages
+        return super().form_valid(form)

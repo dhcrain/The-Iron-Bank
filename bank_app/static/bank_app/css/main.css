@@ -3,6 +3,9 @@ body {
     padding-top: 50px;
     background-color: #F9F9F9;
 }
+.nav {
+    background-color: #F9F9F9;
+}
 .hero-block {
     /*background-image: url({% static 'bank_app/static/img/piggy.jpg' %});*/
     background-image: url(https://www.dropbox.com/s/dvg5v6q23heyggt/piggy.jpg?raw=1);
@@ -18,6 +21,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.t-detail li {
+.t-detail td {
     font-size: 3em;
 }
