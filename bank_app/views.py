@@ -62,21 +62,29 @@ class AddTransactionView(CreateView):
 
 class TransferView(CreateView):
     model = Transaction
-    # template_name = 'bank_app/transfer.html'
-    fields = ['ammount', 'payee']
+    template_name = 'bank_app/transfer.html'
+    fields = ['payee', 'ammount']
     success_url = '/account'
 
     def form_valid(self, form):
+
         context = super().get_context_data()
         transaction = form.save(commit=False)
         transaction.user = self.request.user
-        transaction.transaction_type='+'
-        # if transaction.payee not in User.id:
-            # pass # no such account
+        transaction.transaction_type='-'
         balance = get_balance(self)
 
-        Transaction.objects.create(user=User.objects.get(id=transaction.payee), transaction_type='+', ammount=transaction.ammount, payee=transaction.user)
+        if transaction.user == transaction.payee:
+            return HttpResponse("Why are you trying to trasfer money to yourself?")
+
         if (balance - transaction.ammount) <= 0:
             return HttpResponse("Insufficient Funds, you only have $" + str(balance) + " avalible.")
             # https://docs.djangoproject.com/en/1.9/topics/forms/#rendering-form-error-messages
+        Transaction.objects.create(user=User.objects.get(id=transaction.payee), transaction_type='+', ammount=transaction.ammount, payee=transaction.user)
         return super().form_valid(form)
+
+
+
+
+
+        
