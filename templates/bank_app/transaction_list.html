@@ -2,9 +2,10 @@
 
 {% block body %}
         <h1 class="pull-right"><small>Account Balace: </small>${{ balance }}</h1>
-        <p>
-             Account Number: {{ request.user.id }}
-        </p>
+        <p><strong>Name: </strong>{{ request.user }}</p>
+        <p><strong>Account Number: </strong>{{ request.user.id }}</p>
+        <br>
+        <h3>Transactions from the last 30 days</h3>
         <br>
         <table class="table table-condensed">
             <tr>
@@ -12,6 +13,7 @@
                 <th>Payee</td>
                 <th></td>
                 <th>Ammount</td>
+                    <th></td>
             </tr>
             {% for transaction in transactions %}
             <tr>
@@ -19,7 +21,7 @@
                 <td>{{ transaction.payee }}</td>
                 <td>{{ transaction.transaction_type }}</td>
                 <td>${{ transaction.ammount }}</td>
-                <td><a href="{% url 'detail_view' transaction.id %}">Details</a></td>
+                <td><a class="btn btn-default" href="{% url 'detail_view' transaction.id %}">Details</a></td>
             </tr>
             {% endfor %}
         </table>

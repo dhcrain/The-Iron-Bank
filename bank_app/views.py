@@ -34,13 +34,16 @@ class AccountView(LoginRequiredMixin, ListView):
         context['transactions'] = Transaction.objects.filter(user=self.request.user).filter(date__lte=datetime.datetime.today(), date__gt=datetime.datetime.today()-datetime.timedelta(days=30))
         return context
 
-class DetailView(TemplateView):
+class DetailView(LoginRequiredMixin, TemplateView):
     model = Transaction
     template_name = 'transaction_detail.html'
 
     def get_context_data(self, **kwargs):
-        trans_pk = self.kwargs.get('pk', None)      # gets Bookmark PK
+        trans_pk = self.kwargs.get('pk', None)
+        trans = Transaction.objects.get(id=trans_pk)
         context = super().get_context_data(**kwargs)    # I have no idea what this does
-        context["transaction"] = Transaction.objects.get(id=trans_pk)
-        # context["clicks"] = Click.objects.filter(link=bookmark_pk)
+        if self.request.user == trans.user:
+            context["transaction"] = trans
+        else:
+            context["not_auth"] = "You are not authorized to view this data."
         return context
