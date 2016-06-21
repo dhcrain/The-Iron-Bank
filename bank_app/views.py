@@ -53,6 +53,10 @@ class AddTransactionView(CreateView):
     def form_valid(self, form):
         context = super().get_context_data()
         transaction = form.save(commit=False)
+
+    def form_valid(self, form):
+        context = super().get_context_data()
+        transaction = form.save(commit=False)
         transaction.user = self.request.user
         if transaction.transaction_type == '-':
             balance = get_balance(self)
@@ -74,7 +78,7 @@ class TransferView(CreateView):
         transaction.transaction_type='-'
         balance = get_balance(self)
 
-        if transaction.user == transaction.payee:
+        if self.request.user.id == transaction.payee:
             return HttpResponse("Why are you trying to trasfer money to yourself?")
 
         if (balance - transaction.ammount) <= 0:
@@ -82,9 +86,3 @@ class TransferView(CreateView):
             # https://docs.djangoproject.com/en/1.9/topics/forms/#rendering-form-error-messages
         Transaction.objects.create(user=User.objects.get(id=transaction.payee), transaction_type='+', ammount=transaction.ammount, payee=transaction.user)
         return super().form_valid(form)
-
-
-
-
-
-        
