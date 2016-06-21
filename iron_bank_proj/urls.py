@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from bank_app.views import IndexView, AccountView, DetailView
+from bank_app.views import IndexView, AccountView, DetailView, AddTransactionView
 from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index_view'),
     url('^register/', CreateView.as_view(template_name='register.html', form_class=UserCreationForm, success_url='/login'), name='register_view'),
     url(r'^account/$', AccountView.as_view(), name='account_view'),
+    url(r'^account/add$', AddTransactionView.as_view(), name='add_transaction_view'),
     url(r'^account/detail/(?P<pk>\d+)', DetailView.as_view(), name='detail_view'),
 ]

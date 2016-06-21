@@ -13,6 +13,7 @@
             <li role="presentation"><a href="{% url 'index_view' %}">Home</a></li>
             {% if request.user.is_authenticated %}
                 <li role="presentation"><a href="{% url 'account_view' %}">Account</a></li>
+                {# <li role="presentation"><a href="{% url 'add_transaction_view' %}">Add Transaction</a></li>#}
                 <li role="presentation"><a href="{% url 'logout' %}?next={% url 'index_view' %}">Log Out</a></li>
                 <li role="presentation" class="disabled pull-right"><a href="#">Welcome {{ request.user }}</a></li>
             {% else %}
