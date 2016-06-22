@@ -9,6 +9,8 @@ from bank_app.models import Transaction
 from bank_app.forms import TransferForm
 from django.http import request, HttpResponse
 from django.db.models.base import ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+
 
 # Create your views here.
 
@@ -80,6 +82,15 @@ class TransferView(CreateView):
         transaction.transaction_type='-'
         balance = get_balance(self)
 
+        def clean_ammount(self):
+            if (balance - transaction.ammount) <= 0:
+                raise ValidationError("1 Insufficient Funds, you only have $" + str(balance) + " avalible.")
+                return self
+        clean_ammount(self)
+
+        # I feel like both of these solutions smell
+        # if (balance - transaction.ammount) <= 0:
+        #     return HttpResponse("Insufficient Funds, you only have $" + str(balance) + " avalible.")
 
         try:
             User.objects.get(id=transaction.payee)
@@ -87,11 +98,6 @@ class TransferView(CreateView):
                 return HttpResponse("Why are you trying to trasfer money to yourself?")
         except ObjectDoesNotExist:
             return HttpResponse("That account does not exist")
-
-
-        if (balance - transaction.ammount) <= 0:
-            return HttpResponse("Insufficient Funds, you only have $" + str(balance) + " avalible.")
-            # https://docs.djangoproject.com/en/1.9/topics/forms/#rendering-form-error-messages
 
         transaction.payee = User.objects.get(id=transaction.payee)  # makes the transaction in the account_view more readable
         Transaction.objects.create(user=transaction.payee, transaction_type='+', ammount=transaction.ammount, payee=transaction.user)

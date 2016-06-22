@@ -7,7 +7,8 @@ body {
     background-color: #F9F9F9;
 }
 .hero-block {
-    /*background-image: url({% static 'bank_app/static/img/piggy.jpg' %});*/
+    /* why can't I load the static file? */
+    /*background-image: url({% static 'bank_app/img/piggy.jpg' %});*/
     background-image: url(https://www.dropbox.com/s/dvg5v6q23heyggt/piggy.jpg?raw=1);
     background-size: contain;
     background-repeat:no-repeat;

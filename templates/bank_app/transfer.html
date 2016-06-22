@@ -3,19 +3,19 @@
 {% block body %}
     <form class="" action="" method="post">
         {% csrf_token %}
+        {{ form.non_field_errors }}
         <table class="table">
-        {{ from.as_table }}
+        {# {{ from.as_table }}#}
         <tr>
-            <td>Transfer funds to this account number: </td>
+            <td>Transfer funds to this account number: <br>{{ form.payee.errors }}</td>
             <td>{{ form.payee }}</td>
         </tr>
         <tr>
-            <td>Transfer this ammount: </td>
+            <td>Transfer this ammount: <br>{{ form.ammount.errors }}</td>
             <td>{{ form.ammount }}</td>
         </tr>
         </table>
         {{ form.errors }}
         <input class="btn btn-default" type="submit" name="add" value="Transfer Funds">
     </form>
-    {{ not_allowed }}
 {% endblock %}
