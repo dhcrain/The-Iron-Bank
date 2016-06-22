@@ -4,6 +4,7 @@
     <form class="" action="" method="post">
         {% csrf_token %}
         <table class="table">
+        {{ from.as_table }}
         <tr>
             <td>Transfer funds to this account number: </td>
             <td>{{ form.payee }}</td>

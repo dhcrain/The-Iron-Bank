@@ -1,13 +1,14 @@
 from django.shortcuts import render
 import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import TemplateView
-from django.views.generic import ListView, DetailView
-from bank_app.models import Transaction
-from django.http import request
 from django.contrib.auth.models import User
-from django.views.generic.edit import CreateView
-from django.http import HttpResponse
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, FormView
+from bank_app.models import Transaction
+from bank_app.forms import TransferForm
+from django.http import request, HttpResponse
+from django.db.models.base import ObjectDoesNotExist
 
 # Create your views here.
 
@@ -66,23 +67,33 @@ class AddTransactionView(CreateView):
 
 class TransferView(CreateView):
     model = Transaction
-    template_name = 'bank_app/transfer.html'
     fields = ['payee', 'ammount']
+    # form_class = TransferForm
+    template_name = 'bank_app/transfer.html'
     success_url = '/account'
 
-    def form_valid(self, form):
 
+    def form_valid(self, form):
         context = super().get_context_data()
         transaction = form.save(commit=False)
         transaction.user = self.request.user
         transaction.transaction_type='-'
         balance = get_balance(self)
 
-        if self.request.user.id == transaction.payee:
-            return HttpResponse("Why are you trying to trasfer money to yourself?")
+
+        try:
+            User.objects.get(id=transaction.payee)
+            if int(self.request.user.id) == int(transaction.payee):
+                return HttpResponse("Why are you trying to trasfer money to yourself?")
+        except ObjectDoesNotExist:
+            return HttpResponse("That account does not exist")
+
 
         if (balance - transaction.ammount) <= 0:
             return HttpResponse("Insufficient Funds, you only have $" + str(balance) + " avalible.")
             # https://docs.djangoproject.com/en/1.9/topics/forms/#rendering-form-error-messages
-        Transaction.objects.create(user=User.objects.get(id=transaction.payee), transaction_type='+', ammount=transaction.ammount, payee=transaction.user)
+
+        transaction.payee = User.objects.get(id=transaction.payee)  # makes the transaction in the account_view more readable
+        Transaction.objects.create(user=transaction.payee, transaction_type='+', ammount=transaction.ammount, payee=transaction.user)
+
         return super().form_valid(form)
