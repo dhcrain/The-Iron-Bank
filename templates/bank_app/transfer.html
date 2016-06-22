@@ -4,17 +4,11 @@
     <form class="form-center trans-form text-center" action="" method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
-        <table class="table">
-        {# {{ from.as_table }}#}
-        <tr>
-            <td>Transfer funds to this account number: <br>{{ form.payee.errors }}</td>
-            <td>{{ form.payee }}</td>
-        </tr>
-        <tr>
-            <td>Transfer this ammount: <br>{{ form.ammount.errors }}</td>
-            <td>{{ form.ammount }}</td>
-        </tr>
-        </table>
+        <p>Transfer funds to this account: <br>{{ form.payee.errors }}</p>
+        <p>{{ form.payee }}</p>
+        <p>Transfer this ammount: <br>{{ form.ammount.errors }}</p>
+        <p>{{ form.ammount }}</p>
+        <br>
         <input class="btn btn-default" type="submit" name="add" value="Transfer Funds">
     </form>
 {% endblock %}
