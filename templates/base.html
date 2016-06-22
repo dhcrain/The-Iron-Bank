@@ -15,7 +15,7 @@
                 <li role="presentation"><a href="{% url 'account_view' %}">Account</a></li>
                 <li role="presentation"><a href="{% url 'add_transaction_view' %}">Add Transaction</a></li>
                 <li role="presentation"><a href="{% url 'transfer_view' %}">Transfer Funds</a></li>
-                <li role="presentation"><a href="{% url 'logout' %}?next={% url 'index_view' %}">Log Out</a></li>
+                <li role="presentation" class="pull-right"><a href="{% url 'logout' %}?next={% url 'index_view' %}">Log Out</a></li>
                 <li role="presentation" class="disabled pull-right"><a href="#">Welcome {{ request.user }}</a></li>
             {% else %}
                 <li role="presentation"><a href="{% url 'register_view' %}">Get an account</a></li>

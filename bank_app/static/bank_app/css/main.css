@@ -1,20 +1,22 @@
 {% load staticfiles %}
 body {
-    padding-top: 50px;
+    padding-top: 40px;
     background-color: #F9F9F9;
 }
 .nav {
-    background-color: #F9F9F9;
+    background-color: #F1F1F1;
 }
 .hero-block {
     /* why can't I load the static file? */
     /*background-image: url({% static 'bank_app/img/piggy.jpg' %});*/
-    background-image: url(https://www.dropbox.com/s/dvg5v6q23heyggt/piggy.jpg?raw=1);
+    /*background-image: url(https://www.dropbox.com/s/dvg5v6q23heyggt/piggy.jpg?raw=1);*/
+    background-image: url('/static/bank_app/img/piggy.jpg');
     background-size: contain;
     background-repeat:no-repeat;
     background-position: center;
-    height: 150px;
+    height: 160px;
     position: relative;
+    border-bottom: 1px solid #E48176;
 }
 .hero-text {
     position: absolute;
@@ -24,4 +26,8 @@ body {
 }
 .t-detail td {
     font-size: 3em;
+}
+.center-center {
+    width: 300px;
+    margin: 0 auto;
 }
