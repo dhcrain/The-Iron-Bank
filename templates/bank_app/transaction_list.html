@@ -5,6 +5,7 @@
         <h1 class="pull-right"><small>Account Balace: </small>${{ balance }}</h1>
         <p><strong>Name: </strong>{{ request.user }}</p>
         <p><strong>Account Number: </strong>{{ request.user.id }}</p>
+        <p><a class="btn btn-success"href="#add_transaction_form">Add Transaction</a></p>
         <br>
         <h3>Transactions from the last 30 days</h3>
         <br>
@@ -26,6 +27,17 @@
             </tr>
             {% endfor %}
         </table>
-
-
+        <a name="add_transaction_form"></a>
+        <div class="bank_form">
+            <form class="form-center text-center" action="" method="post">
+                <h3>Add Transaction</h3>
+                <br>
+                {% csrf_token %}
+                <table class="">
+                    {{ form.as_table }}
+                </table>
+                <br>
+                <input class="btn btn-default" type="submit" name="add" value="Add Transaction">
+            </form>
+        </div>
 {% endblock %}

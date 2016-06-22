@@ -16,7 +16,7 @@ body {
     background-position: center;
     height: 160px;
     position: relative;
-    border-bottom: 1px solid #E48176;
+    border-bottom: 3px solid #E48176;
 }
 .hero-text {
     position: absolute;
@@ -27,7 +27,15 @@ body {
 .t-detail td {
     font-size: 3em;
 }
-.center-center {
-    width: 300px;
-    margin: 0 auto;
+.bank_form {
+}
+.form-center {
+    padding: 25px 25px 25px 25px;
+    margin: 50px auto;
+    width: 45%;
+    border: 3px solid #E48176;
+    border-radius: 40px;
+}
+.trans-form {
+    width: 45%;
 }

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {# Maybe dont need this.....#}
 {% block body %}
-    <form class="" action="" method="post">
+    <form class="form-center trans-form text-center" action="" method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <table class="table">

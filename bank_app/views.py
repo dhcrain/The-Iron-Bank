@@ -3,9 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import CreateView, FormView
+from django.views.generic.edit import CreateView
 from bank_app.models import Transaction
-from bank_app.forms import TransferForm
 from django.http import request, HttpResponse
 from django.db.models.base import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
@@ -29,9 +28,11 @@ class IndexView(TemplateView):
     template_name = "index.html"
 
 
-class AccountView(LoginRequiredMixin, ListView):
+class AccountView(LoginRequiredMixin, CreateView):
     model = Transaction
     template_name = 'bank_app/transaction_list.html'
+    fields = ['transaction_type', 'ammount', 'payee']
+    success_url = reverse_lazy('account_view')
 
     def get_context_data(self, **kwargs):
         get_balance(self)
@@ -41,18 +42,6 @@ class AccountView(LoginRequiredMixin, ListView):
         context['transactions'] = Transaction.objects.filter(user=self.request.user).filter(date__gt=thirty_days_ago)
         return context
 
-class TransactionDetailView(LoginRequiredMixin, DetailView):
-    model = Transaction
-    template_name = 'transaction_detail.html'
-
-    def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user)
-
-
-class AddTransactionView(CreateView):
-    model = Transaction
-    fields = ['transaction_type', 'ammount', 'payee']
-    success_url = reverse_lazy('account_view')
 
     def form_valid(self, form):
         context = super().get_context_data()
@@ -68,6 +57,14 @@ class AddTransactionView(CreateView):
                 form.add_error('ammount', "Insufficient Funds, you only have $" + str(balance) + " avalible.")
                 return self.form_invalid(form)
         return super().form_valid(form)
+
+class TransactionDetailView(LoginRequiredMixin, DetailView):
+    model = Transaction
+    template_name = 'transaction_detail.html'
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)
+
 
 class TransferView(CreateView):
     model = Transaction
@@ -88,6 +85,7 @@ class TransferView(CreateView):
             return self.form_invalid(form)
 
         try:
+            User.objects.get(id=transaction.payee)      # this is what it is trying, not idle like you thought when you deleted it and broke everything
             if int(self.request.user.id) == int(transaction.payee):
                 form.add_error('payee', "Why are you trying to trasfer money to yourself?")
                 return self.form_invalid(form)
