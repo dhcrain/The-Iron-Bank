@@ -13,15 +13,15 @@ from django.core.urlresolvers import reverse_lazy
 
 # Create your views here.
 
-def get_balance(self):
-    self.acct_balance = 0
-    transactions = Transaction.objects.filter(user=self.request.user)
+def get_balance(user):
+    acct_balance = 0
+    transactions = Transaction.objects.filter(user=user)
     for trans in transactions:
         if trans.transaction_type == '+':
-            self.acct_balance += trans.ammount
+            acct_balance += trans.ammount
         else:
-            self.acct_balance -= trans.ammount
-    return self.acct_balance
+            acct_balance -= trans.ammount
+    return acct_balance
 
 
 class IndexView(TemplateView):
@@ -35,9 +35,9 @@ class AccountView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('account_view')
 
     def get_context_data(self, **kwargs):
-        get_balance(self)
+        user = self.request.user
         context = super().get_context_data(**kwargs)
-        context["balance"] = self.acct_balance
+        context["balance"] = get_balance(user)
         thirty_days_ago = datetime.datetime.now() + datetime.timedelta(days=-30)
         context['transactions'] = Transaction.objects.filter(user=self.request.user).filter(date__gt=thirty_days_ago)
         return context
@@ -52,7 +52,7 @@ class AccountView(LoginRequiredMixin, CreateView):
         transaction = form.save(commit=False)
         transaction.user = self.request.user
         if transaction.transaction_type == '-':
-            balance = get_balance(self)
+            balance = get_balance(transaction.user)
             if (balance - transaction.ammount) <= 0:
                 form.add_error('ammount', "Insufficient Funds, you only have $" + str(balance) + " avalible.")
                 return self.form_invalid(form)
@@ -78,7 +78,7 @@ class TransferView(CreateView):
         transaction = form.save(commit=False)
         transaction.user = self.request.user
         transaction.transaction_type='-'    # take money out of users account
-        balance = get_balance(self)
+        balance = get_balance(transaction.user)
 
         if (balance - transaction.ammount) <= 0:
             form.add_error('ammount', "Insufficient Funds, you only have $" + str(balance) + " avalible.")
