@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from bank_app.views import IndexView, AccountView, TransactionDetailView, TransferView
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='transaction',
-            name='ammount',
+            name='amount',
             field=models.DecimalField(decimal_places=2, max_digits=8),
         ),
     ]

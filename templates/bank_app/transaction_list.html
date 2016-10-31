@@ -11,18 +11,18 @@
         <br>
         <table class="table table-condensed">
             <tr>
-                <th>Date</td>
-                <th>Payee</td>
-                <th></td>
-                <th>Ammount</td>
-                    <th></td>
+                <th>Date</th>
+                <th>Payee</th>
+                <th></th>
+                <th>Amount</th>
+                <th></th>
             </tr>
             {% for transaction in transactions %}
             <tr>
                 <td>{{ transaction.date }}</td>
                 <td>{{ transaction.payee }}</td>
                 <td>{{ transaction.transaction_type }}</td>
-                <td>${{ transaction.ammount }}</td>
+                <td>${{ transaction.amount }}</td>
                 <td><a class="btn btn-default" href="{% url 'detail_view' transaction.id %}">Details</a></td>
             </tr>
             {% endfor %}
