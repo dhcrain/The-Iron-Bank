@@ -2,7 +2,8 @@
 
 {% block body %}
         <h1 class="text-center">{{ not_allowed }}</h1>
-        <h1 class="pull-right"><small>Account Balace: </small>${{ balance }}</h1>
+        <h1 class="pull-right"><small>Account Balace: </small>${{ request.user.profile.get_balance }}</h1>
+        <h1>{{ request.user.profile.get_balance }}</h1>
         <p><strong>Name: </strong>{{ request.user }}</p>
         <p><strong>Account Number: </strong>{{ request.user.id }}</p>
         <p><a class="btn btn-success"href="#add_transaction_form">Add Transaction</a></p>
